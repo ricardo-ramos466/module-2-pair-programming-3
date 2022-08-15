@@ -2,6 +2,7 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.CatCardDao;
 import com.techelevator.model.CatCard;
+import com.techelevator.model.CatCardNotFoundException;
 import com.techelevator.services.CatFactService;
 import com.techelevator.services.CatPicService;
 import org.springframework.web.bind.annotation.*;
@@ -29,16 +30,12 @@ public class CatController {
     }
 
     @GetMapping(path = "/{id}")
-    public CatCard get(@PathVariable int id){
+    public CatCard get(@PathVariable int id) throws CatCardNotFoundException{
         return catCardDao.get(id);
     }
     @GetMapping(path = "/random")
     public CatCard random(){
-//        int cardId = 0;
-//        while(cardId==0 || cardId>catCardDao.list().size()) {
-//            cardId = (int) (Math.random() * 10);
-//        }
-//        return catCardDao.get(cardId);
+
         card.setCatFact(catFactService.getFact().getText());
         card.setImgUrl(catPicService.getPic().getFile());
         return card;
@@ -51,13 +48,13 @@ public class CatController {
     }
 
     @PutMapping(path = "/{id}")
-    public CatCard update(@PathVariable int id, @Valid @RequestBody CatCard card){
+    public CatCard update(@PathVariable int id, @Valid @RequestBody CatCard card) throws CatCardNotFoundException {
         catCardDao.update(id,card);
         return card;
     }
 
     @DeleteMapping(path = "/{id}")
-    public void delete(@PathVariable int id){
+    public void delete(@PathVariable int id) throws CatCardNotFoundException{
         catCardDao.delete(id);
     }
 }
